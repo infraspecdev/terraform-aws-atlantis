@@ -2,7 +2,6 @@ resource "aws_ecs_cluster" "this" {
   name = var.cluster_name
 }
 
-# extract to iam
 resource "random_pet" "name" {
   length    = 1
   separator = "-"
@@ -22,7 +21,6 @@ resource "aws_iam_instance_profile" "this" {
   name = "${local.iam_instance_profile_name_prefix}-${random_pet.name.id}"
   role = aws_iam_role.instace_role.name
 }
-#
 
 resource "aws_launch_template" "this" {
   name_prefix   = var.launch_template_name_prefix
@@ -35,7 +33,6 @@ resource "aws_launch_template" "this" {
 echo ECS_CLUSTER=${aws_ecs_cluster.this.name} >> /etc/ecs/ecs.config
 EOF
   )
-
 
   network_interfaces {
     associate_public_ip_address = true
@@ -51,7 +48,6 @@ EOF
     create_before_destroy = true
   }
 }
-
 
 resource "aws_autoscaling_group" "this" {
   desired_capacity    = var.auto_scaling_group_desired_capacity
@@ -98,6 +94,7 @@ resource "aws_ecs_service" "this" {
   }
 
   depends_on = [
+    aws_lb_listener_rule.events_post_rule,
     aws_lb_listener_rule.default_rule,
   ]
 }
@@ -141,8 +138,6 @@ resource "aws_cloudwatch_log_group" "this" {
   name              = "/${var.cluster_name}/${var.service_name}"
   retention_in_days = 14
 }
-
-
 
 resource "aws_security_group" "this" {
   name        = "${var.service_name}-ecs-sg"
@@ -200,18 +195,44 @@ resource "aws_lb_target_group" "ip_target" {
   }
 }
 
-resource "aws_lb_listener_rule" "default_rule" {
+resource "aws_lb_listener_rule" "events_post_rule" {
   listener_arn = var.endpoint_details.lb_listener_arn
   priority     = 10
 
   condition {
-    host_header {
-      values = [var.endpoint_details.domain_url]
+    path_pattern {
+      values = ["/events"]
+    }
+  }
+
+  condition {
+    http_request_method {
+      values = ["POST"]
     }
   }
 
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.ip_target[0].arn
+  }
+}
+
+resource "aws_lb_listener_rule" "default_rule" {
+  listener_arn = var.endpoint_details.lb_listener_arn
+  priority     = 20
+
+  condition {
+    path_pattern {
+      values = ["/*"]
+    }
+  }
+
+  action {
+    type = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Not Found"
+      status_code  = "404"
+    }
   }
 }

@@ -3,8 +3,7 @@ resource "aws_lb" "this" {
   internal           = var.load_balancer_internal
   load_balancer_type = var.load_balancer_type
   security_groups    = [aws_security_group.this.id]
-  # subnet-1 , subnet-2
-  subnets = var.public_subnet_ids
+  subnets            = var.public_subnet_ids
 }
 
 resource "aws_security_group" "this" {
