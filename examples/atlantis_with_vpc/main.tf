@@ -1,6 +1,5 @@
 module "network" {
   source             = "../../modules/network"
-  region             = var.region
   availability_zones = var.availability_zones
 }
 
