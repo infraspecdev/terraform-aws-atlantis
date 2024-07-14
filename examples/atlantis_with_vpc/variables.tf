@@ -53,3 +53,13 @@ variable "launch_template_key_name" {
   description = "(Optional) The key name to use for the instance."
   type        = string
 }
+
+variable "region" {
+  description = "Region for creating resources"
+  type        = string
+}
+
+variable "availability_zones" {
+  description = "List of Availability zone where the subnet must reside."
+  type        = list(string)
+}
