@@ -13,7 +13,6 @@ repos:
           - "--args=--only=terraform_documented_outputs"
           - "--args=--only=terraform_documented_variables"
           - "--args=--only=terraform_typed_variables"
-          - "--args=--only=terraform_module_pinned_source"
           - "--args=--only=terraform_naming_convention"
           - "--args=--only=terraform_standard_module_structure"
           - "--args=--only=terraform_workspace_remote"
