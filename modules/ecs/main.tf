@@ -1,5 +1,6 @@
-resource "aws_ecs_cluster" "this" {
-  name = var.cluster_name
+module "ecs_cluster" {
+  source       = "github.com/infraspecdev/terraform-aws-ecs?ref=main"
+  cluster_name = "atlantis"
 }
 
 resource "random_pet" "name" {
@@ -30,7 +31,7 @@ resource "aws_launch_template" "this" {
 
   user_data = base64encode(<<EOF
 #!/bin/bash
-echo ECS_CLUSTER=${aws_ecs_cluster.this.name} >> /etc/ecs/ecs.config
+echo ECS_CLUSTER=${module.ecs_cluster.cluster_arn} >> /etc/ecs/ecs.config
 EOF
   )
 
@@ -72,7 +73,7 @@ resource "aws_autoscaling_group" "this" {
 
 resource "aws_ecs_service" "this" {
   name            = var.service_name
-  cluster         = aws_ecs_cluster.this.name
+  cluster         = module.ecs_cluster.cluster_arn
   launch_type     = var.launch_type.type
   task_definition = aws_ecs_task_definition.this.arn
   desired_count   = var.service_desired_count
