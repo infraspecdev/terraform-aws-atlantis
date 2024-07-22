@@ -1,6 +1,9 @@
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.5.0 |
 
 ## Providers
 
@@ -11,16 +14,13 @@ No requirements.
 
 ## Modules
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_ecs_cluster"></a> [ecs\_cluster](#module\_ecs\_cluster) | github.com/infraspecdev/terraform-aws-ecs | main |
+No modules.
 
 ## Resources
 
 | Name | Type |
 |------|------|
 | [aws_autoscaling_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_group) | resource |
-| [aws_cloudwatch_log_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_ecs_service.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_service) | resource |
 | [aws_ecs_task_definition.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition) | resource |
 | [aws_iam_instance_profile.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
@@ -41,22 +41,22 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_auto_scaling_group_desired_capacity"></a> [auto\_scaling\_group\_desired\_capacity](#input\_auto\_scaling\_group\_desired\_capacity) | (Optional) Number of Amazon EC2 instances that should be running in the group. | `number` | `2` | no |
-| <a name="input_auto_scaling_group_max_size"></a> [auto\_scaling\_group\_max\_size](#input\_auto\_scaling\_group\_max\_size) | (Required) Maximum size of the Auto Scaling Group. | `number` | `3` | no |
-| <a name="input_auto_scaling_group_min_size"></a> [auto\_scaling\_group\_min\_size](#input\_auto\_scaling\_group\_min\_size) | (Required) Minimum size of the Auto Scaling Group | `number` | `1` | no |
-| <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | (Required) Name of the cluster. | `string` | n/a | yes |
+| <a name="input_authenticate_oidc_details"></a> [authenticate\_oidc\_details](#input\_authenticate\_oidc\_details) | Contains OIDC authentication details (endpoint, client ID, client secret) for Atlantis server integration. | <pre>object({<br>    oidc_endpoint = string<br>    client_id     = string<br>    client_secret = string<br>  })</pre> | n/a | yes |
+| <a name="input_auto_scaling_group_desired_capacity"></a> [auto\_scaling\_group\_desired\_capacity](#input\_auto\_scaling\_group\_desired\_capacity) | (Optional) Number of Amazon EC2 instances that should be running in the group. | `number` | n/a | yes |
+| <a name="input_auto_scaling_group_max_size"></a> [auto\_scaling\_group\_max\_size](#input\_auto\_scaling\_group\_max\_size) | (Required) Maximum size of the Auto Scaling Group. | `number` | n/a | yes |
+| <a name="input_auto_scaling_group_min_size"></a> [auto\_scaling\_group\_min\_size](#input\_auto\_scaling\_group\_min\_size) | (Required) Minimum size of the Auto Scaling Group | `number` | n/a | yes |
+| <a name="input_cluster_arn"></a> [cluster\_arn](#input\_cluster\_arn) | (Required) ARN value of the default ecs cluster | `string` | n/a | yes |
 | <a name="input_container_definitions"></a> [container\_definitions](#input\_container\_definitions) | JSON encoded list of container definition assigned to ecs task | `string` | n/a | yes |
 | <a name="input_endpoint_details"></a> [endpoint\_details](#input\_endpoint\_details) | Endpoint details | <pre>object({<br>    lb_listener_arn = string<br>    domain_url      = string<br>  })</pre> | `null` | no |
 | <a name="input_launch_template_image_id"></a> [launch\_template\_image\_id](#input\_launch\_template\_image\_id) | (Optional) The AMI from which to launch the instance. | `string` | `"ami-0352888a5fa748216"` | no |
-| <a name="input_launch_template_instance_type"></a> [launch\_template\_instance\_type](#input\_launch\_template\_instance\_type) | (Optional) The type of the instance. | `string` | `"t2.micro"` | no |
+| <a name="input_launch_template_instance_type"></a> [launch\_template\_instance\_type](#input\_launch\_template\_instance\_type) | (Optional) The type of the instance. | `string` | n/a | yes |
 | <a name="input_launch_template_key_name"></a> [launch\_template\_key\_name](#input\_launch\_template\_key\_name) | (Optional) The key name to use for the instance. | `string` | n/a | yes |
 | <a name="input_launch_template_name_prefix"></a> [launch\_template\_name\_prefix](#input\_launch\_template\_name\_prefix) | Name prefix for the launch template resource. | `string` | `"ecs-"` | no |
-| <a name="input_launch_type"></a> [launch\_type](#input\_launch\_type) | ECS launch type | <pre>object({<br>    type   = string<br>    cpu    = number<br>    memory = number<br>  })</pre> | <pre>{<br>  "cpu": null,<br>  "memory": null,<br>  "type": "EC2"<br>}</pre> | no |
+| <a name="input_launch_type"></a> [launch\_type](#input\_launch\_type) | ECS launch type | <pre>object({<br>    type   = string<br>    cpu    = optional(number)<br>    memory = optional(number)<br>  })</pre> | n/a | yes |
 | <a name="input_private_subnet_ids"></a> [private\_subnet\_ids](#input\_private\_subnet\_ids) | List of Private subnet ids to deploy containers. | `list(string)` | n/a | yes |
-| <a name="input_region"></a> [region](#input\_region) | AWS region to create resources. | `string` | `"ap-south-1"` | no |
-| <a name="input_service_desired_count"></a> [service\_desired\_count](#input\_service\_desired\_count) | (Optional) Number of instances of the task definition to place and keep running. | `number` | `1` | no |
-| <a name="input_service_name"></a> [service\_name](#input\_service\_name) | (Required) Name of the service. | `string` | n/a | yes |
-| <a name="input_task_definition_family"></a> [task\_definition\_family](#input\_task\_definition\_family) | (Required) A unique name for your task definition. | `string` | n/a | yes |
+| <a name="input_service_desired_count"></a> [service\_desired\_count](#input\_service\_desired\_count) | (Optional) Number of instances of the task definition to place and keep running. | `number` | n/a | yes |
+| <a name="input_service_name"></a> [service\_name](#input\_service\_name) | (Required) Name of the service. | `string` | `"atlantis"` | no |
+| <a name="input_task_definition_family"></a> [task\_definition\_family](#input\_task\_definition\_family) | (Required) A unique name for your task definition. | `string` | `"atlantis"` | no |
 | <a name="input_vpc_cidr_block"></a> [vpc\_cidr\_block](#input\_vpc\_cidr\_block) | VPC CIDR block for creating security group. | `string` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | VPC ID for creating ECS Resources. | `string` | n/a | yes |
 

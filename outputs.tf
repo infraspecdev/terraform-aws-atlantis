@@ -33,3 +33,13 @@ output "vpc_id" {
   description = "The ID of the VPC."
   value       = var.vpc_id
 }
+
+output "authorized_javascript_origin" {
+  description = "The base URL for your application that is authorized to use JavaScript for OAuth requests."
+  value       = "https://${local.atlantis_url}"
+}
+
+output "authorized_redirect_uri" {
+  description = "The redirect URI used by your OAuth provider to return responses to your application."
+  value       = "https://${local.atlantis_url}/oauth2/idpresponse"
+}

@@ -1,8 +1,3 @@
-module "ecs_cluster" {
-  source       = "github.com/infraspecdev/terraform-aws-ecs?ref=main"
-  cluster_name = "atlantis"
-}
-
 resource "random_pet" "name" {
   length    = 1
   separator = "-"
@@ -25,13 +20,13 @@ resource "aws_iam_instance_profile" "this" {
 
 resource "aws_launch_template" "this" {
   name_prefix   = var.launch_template_name_prefix
-  image_id      = var.launch_template_image_id
-  instance_type = var.launch_template_instance_type
+  image_id      = var.launch_template_image_id != null ? var.launch_template_image_id : local.launch_template_image_id
+  instance_type = var.launch_template_instance_type != null ? var.launch_template_instance_type : local.launch_template_instance_type
   key_name      = var.launch_template_key_name
 
   user_data = base64encode(<<EOF
 #!/bin/bash
-echo ECS_CLUSTER=${module.ecs_cluster.cluster_arn} >> /etc/ecs/ecs.config
+echo ECS_CLUSTER=${var.cluster_arn} >> /etc/ecs/ecs.config
 EOF
   )
 
@@ -51,7 +46,7 @@ EOF
 }
 
 resource "aws_autoscaling_group" "this" {
-  desired_capacity    = var.auto_scaling_group_desired_capacity
+  desired_capacity    = var.auto_scaling_group_desired_capacity != null ? var.auto_scaling_group_desired_capacity : 1
   max_size            = var.auto_scaling_group_max_size
   min_size            = var.auto_scaling_group_min_size
   vpc_zone_identifier = var.private_subnet_ids
@@ -66,17 +61,17 @@ resource "aws_autoscaling_group" "this" {
 
   tag {
     key                 = "Name"
-    value               = "${var.cluster_name}-ec2"
+    value               = "${var.service_name}-ec2"
     propagate_at_launch = true
   }
 }
 
 resource "aws_ecs_service" "this" {
   name            = var.service_name
-  cluster         = module.ecs_cluster.cluster_arn
+  cluster         = var.cluster_arn
   launch_type     = var.launch_type.type
   task_definition = aws_ecs_task_definition.this.arn
-  desired_count   = var.service_desired_count
+  desired_count   = var.service_desired_count != null ? var.service_desired_count : 1
 
   dynamic "load_balancer" {
     for_each = var.endpoint_details != null ? [1] : []
@@ -106,12 +101,12 @@ resource "aws_ecs_task_definition" "this" {
   requires_compatibilities = [var.launch_type.type]
   execution_role_arn       = aws_iam_role.task_role.arn
   container_definitions    = local.container_definitions
-  cpu                      = var.launch_type.cpu
-  memory                   = var.launch_type.memory
+  cpu                      = try(var.launch_type.cpu, null)
+  memory                   = try(var.launch_type.memory, null)
 }
 
 resource "aws_iam_role" "task_role" {
-  name               = "ecs-task-${var.task_definition_family}-${terraform.workspace}"
+  name               = "ecs-task-${var.task_definition_family}"
   assume_role_policy = data.aws_iam_policy_document.ecs_task_assume_policy.json
 
   inline_policy {
@@ -125,7 +120,8 @@ resource "aws_iam_role" "task_role" {
             "logs:*",
             "ssm:*",
             "kms:Decrypt",
-            "secretsmanager:GetSecretValue"
+            "secretsmanager:GetSecretValue",
+            "sts:AssumeRoleWithWebIdentity"
           ]
           Effect   = "Allow"
           Resource = "*"
@@ -133,11 +129,6 @@ resource "aws_iam_role" "task_role" {
       ]
     })
   }
-}
-
-resource "aws_cloudwatch_log_group" "this" {
-  name              = "/${var.cluster_name}/${var.service_name}"
-  retention_in_days = 14
 }
 
 resource "aws_security_group" "this" {
@@ -196,9 +187,46 @@ resource "aws_lb_target_group" "ip_target" {
   }
 }
 
-resource "aws_lb_listener_rule" "events_post_rule" {
+resource "aws_lb_listener_rule" "default_rule" {
+  count        = var.endpoint_details != null ? 1 : 0
   listener_arn = var.endpoint_details.lb_listener_arn
   priority     = 10
+
+  condition {
+    host_header {
+      values = [var.endpoint_details.domain_url]
+    }
+  }
+
+  dynamic "action" {
+    for_each = var.authenticate_oidc_details != null ? [1] : []
+
+    content {
+      type = "authenticate-oidc"
+
+      authenticate_oidc {
+        authorization_endpoint     = local.authenticate_oidc_authorization_endpoint
+        token_endpoint             = local.authenticate_oidc_token_endpoint
+        user_info_endpoint         = local.authenticate_oidc_user_info_endpoint
+        issuer                     = local.authenticate_oidc_issuer
+        session_cookie_name        = format("TOKEN-OIDC-%s", var.authenticate_oidc_details.client_id)
+        scope                      = "openid email"
+        on_unauthenticated_request = "authenticate"
+        client_id                  = var.authenticate_oidc_details.client_id
+        client_secret              = var.authenticate_oidc_details.client_secret
+      }
+    }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.ip_target[0].arn
+  }
+}
+
+resource "aws_lb_listener_rule" "events_post_rule" {
+  listener_arn = var.endpoint_details.lb_listener_arn
+  priority     = 1
 
   condition {
     path_pattern {
@@ -215,25 +243,5 @@ resource "aws_lb_listener_rule" "events_post_rule" {
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.ip_target[0].arn
-  }
-}
-
-resource "aws_lb_listener_rule" "default_rule" {
-  listener_arn = var.endpoint_details.lb_listener_arn
-  priority     = 20
-
-  condition {
-    path_pattern {
-      values = ["/*"]
-    }
-  }
-
-  action {
-    type = "fixed-response"
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "Not Found"
-      status_code  = "404"
-    }
   }
 }

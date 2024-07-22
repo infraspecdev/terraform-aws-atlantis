@@ -1,22 +1,13 @@
-variable "region" {
-  description = "AWS region to create resources."
-  type        = string
-  default     = "ap-south-1"
-}
-
-variable "cluster_name" {
-  type        = string
-  description = "(Required) Name of the cluster."
-}
-
 variable "service_name" {
-  type        = string
   description = "(Required) Name of the service."
+  type        = string
+  default     = "atlantis"
 }
 
 variable "task_definition_family" {
   type        = string
   description = "(Required) A unique name for your task definition."
+  default     = "atlantis"
 }
 
 variable "container_definitions" {
@@ -33,14 +24,9 @@ variable "launch_type" {
   description = "ECS launch type"
   type = object({
     type   = string
-    cpu    = number
-    memory = number
+    cpu    = optional(number)
+    memory = optional(number)
   })
-  default = {
-    type   = "EC2"
-    cpu    = null
-    memory = null
-  }
 }
 
 variable "endpoint_details" {
@@ -55,13 +41,11 @@ variable "endpoint_details" {
 variable "service_desired_count" {
   type        = number
   description = "(Optional) Number of instances of the task definition to place and keep running."
-  default     = 1
 }
 
 variable "launch_template_instance_type" {
   description = "(Optional) The type of the instance."
   type        = string
-  default     = "t2.micro"
 }
 
 variable "launch_template_key_name" {
@@ -78,19 +62,16 @@ variable "launch_template_image_id" {
 variable "auto_scaling_group_desired_capacity" {
   description = "(Optional) Number of Amazon EC2 instances that should be running in the group."
   type        = number
-  default     = 2
 }
 
 variable "auto_scaling_group_min_size" {
   description = "(Required) Minimum size of the Auto Scaling Group"
   type        = number
-  default     = 1
 }
 
 variable "auto_scaling_group_max_size" {
   description = "(Required) Maximum size of the Auto Scaling Group."
   type        = number
-  default     = 3
 }
 
 variable "private_subnet_ids" {
@@ -107,4 +88,18 @@ variable "launch_template_name_prefix" {
   description = "Name prefix for the launch template resource."
   type        = string
   default     = "ecs-"
+}
+
+variable "authenticate_oidc_details" {
+  description = "Contains OIDC authentication details (endpoint, client ID, client secret) for Atlantis server integration."
+  type = object({
+    oidc_endpoint = string
+    client_id     = string
+    client_secret = string
+  })
+}
+
+variable "cluster_arn" {
+  description = "(Required) ARN value of the default ecs cluster"
+  type        = string
 }
