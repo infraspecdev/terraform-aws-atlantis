@@ -1,4 +1,4 @@
-# Terraform Module to Setup Atlantis in ECS with Self-Managed EC2 Instances
+# terraform-aws-atlantis
 
 This Terraform module automates the deployment of the Atlantis server on an ECS cluster with self-managed EC2 instances. It includes the configuration of an Application Load Balancer (ALB) for traffic routing. The module simplifies the process of setting up and managing Atlantis, enabling automated Terraform pull request workflows.
 
