@@ -240,6 +240,12 @@ resource "aws_lb_listener_rule" "events_post_rule" {
     }
   }
 
+  condition {
+    host_header {
+      values = [var.endpoint_details.domain_url]
+    }
+  }
+
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.ip_target[0].arn
