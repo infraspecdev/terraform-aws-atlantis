@@ -12,6 +12,8 @@ launch_template_key_name       = "atlantis-key"
 container_memory_reservation   = 100
 ecs_auto_scaling_group_min_size = 1
 ecs_auto_scaling_group_max_size = 3
+atlantis_gh_user                = "your-github-username"
+atlantis_repo_allowlist         = ["repo1", "repo2"]
 
 # Optional parameters
 ecs_launch_type_cpu            = 256
