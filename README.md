@@ -6,7 +6,7 @@ This Terraform module automates the deployment of the Atlantis server on an ECS 
 
 ### Architectural Diagram
 
-![ATLANTIS](https://github.com/user-attachments/assets/cc22d678-28f7-425d-8d8c-9b5c0d3d89ca)
+![atlantis](https://github.com/user-attachments/assets/0252b4a9-38e3-4e8d-9212-fcfc091001a4)
 
 ---
 
