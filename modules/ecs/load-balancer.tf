@@ -1,19 +1,3 @@
-resource "aws_lb_target_group" "instance_target" {
-  count       = var.endpoint_details != null ? 1 : 0
-  name        = format("%s-%s-instance", var.service_name, terraform.workspace)
-  port        = local.main_container_port
-  protocol    = "HTTP"
-  vpc_id      = var.vpc_id
-  target_type = local.alb_instance_target_type
-
-  health_check {
-    protocol            = "HTTP"
-    interval            = 10
-    unhealthy_threshold = 6
-    matcher             = "200,301-399"
-  }
-}
-
 resource "aws_lb_target_group" "ip_target" {
   count       = var.endpoint_details != null ? 1 : 0
   name        = format("%s-%s-ip", var.service_name, terraform.workspace)

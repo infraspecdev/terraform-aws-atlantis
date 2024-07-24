@@ -29,7 +29,6 @@ locals {
   iam_instance_role_name_prefix            = "ecs-instance-role"
   iam_instance_profile_name_prefix         = "ecs-instance-profile"
   task_definition_network_mode             = "awsvpc"
-  alb_instance_target_type                 = "instance"
   alb_ip_target_type                       = "ip"
   authenticate_oidc_issuer                 = "https://accounts.google.com"
   authenticate_oidc_user_info_endpoint     = "https://openidconnect.googleapis.com/v1/userinfo"

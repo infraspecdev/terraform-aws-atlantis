@@ -9,7 +9,6 @@ resource "aws_autoscaling_group" "this" {
     version = "$Latest"
   }
 
-  target_group_arns     = [aws_lb_target_group.instance_target[0].arn]
   protect_from_scale_in = true
 
   tag {
