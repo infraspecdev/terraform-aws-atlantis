@@ -11,9 +11,8 @@ EOF
   )
 
   network_interfaces {
-    associate_public_ip_address = true
-    subnet_id                   = var.private_subnet_ids[0]
-    security_groups             = [aws_security_group.this.id]
+    subnet_id       = var.private_subnet_ids[0]
+    security_groups = [aws_security_group.this.id]
   }
 
   iam_instance_profile {
