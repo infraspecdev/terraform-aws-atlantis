@@ -1,8 +1,7 @@
 resource "aws_route53_record" "record" {
-  for_each = toset([var.sub_domain])
-  zone_id  = data.aws_route53_zone.zone.zone_id
-  name     = each.key
-  type     = "A"
+  zone_id = data.aws_route53_zone.zone.zone_id
+  name    = local.sub_domain
+  type    = "A"
 
   alias {
     name                   = module.ecs_deployment.alb_dns_name

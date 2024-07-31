@@ -5,7 +5,9 @@ locals {
   alb_ip_target_type                       = "ip"
   ecs_container_definations_name           = "atlantis"
   alb_system_name                          = "atlantis"
-  atlantis_url                             = "${var.sub_domain}.${var.base_domain}"
+  domain_parts                             = split(".", var.atlantis_url)
+  base_domain                              = join(".", slice(local.domain_parts, length(local.domain_parts) - 2, length(local.domain_parts)))
+  sub_domain                               = join(".", slice(local.domain_parts, 0, length(local.domain_parts) - 2))
   ecs_container_definations_image          = "ghcr.io/runatlantis/atlantis:v0.23.1"
   ecs_task_definition_family               = "atlantis"
   task_definition_network_mode             = "awsvpc"
@@ -24,7 +26,7 @@ locals {
     },
     {
       name  = "ATLANTIS_URL"
-      value = "https://${local.atlantis_url}"
+      value = "https://${var.atlantis_url}"
     },
     {
       name  = "ATLANTIS_REPO_ALLOWLIST"
@@ -52,7 +54,7 @@ locals {
     },
     {
       name  = "ATLANTIS_GOOGLE_REDIRECT_URI"
-      value = "https://${local.atlantis_url}/oauth2/idpresponse"
+      value = "https://${var.atlantis_url}/oauth2/idpresponse"
     }
   ]
 

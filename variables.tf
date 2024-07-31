@@ -3,13 +3,8 @@ variable "atlantis_repo_allowlist" {
   type        = string
 }
 
-variable "base_domain" {
-  description = "Your base domain with acm certificate attached to it."
-  type        = string
-}
-
-variable "sub_domain" {
-  description = "Your desired sub domain"
+variable "atlantis_url" {
+  description = "Full URL for the Atlantis server"
   type        = string
 }
 

@@ -1,3 +1,36 @@
+data "aws_ssm_parameter" "environment" {
+  for_each = toset(local.secret_variables)
+  name     = "/atlantis/${each.key}"
+}
+
+data "aws_vpc" "selected" {
+  id = var.vpc_id
+}
+
+data "aws_ecs_cluster" "default" {
+  cluster_name = "default"
+}
+
+data "aws_iam_policy_document" "ecs_task_assume_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_acm_certificate" "base_domain_certificate" {
+  domain   = local.base_domain
+  statuses = ["ISSUED"]
+}
+
+data "aws_route53_zone" "zone" {
+  name = local.base_domain
+}
+
+
 module "ecs_deployment" {
   source  = "infraspecdev/ecs-deployment/aws"
   version = "2.1.0"
@@ -15,7 +48,6 @@ module "ecs_deployment" {
       container_port    = local.container_port
       environment       = local.env_variables
       secrets           = local.secrets
-      command           = ["server"]
       memoryReservation = local.container_memory_reservation
       portMappings = [
         {
@@ -85,7 +117,7 @@ module "ecs_deployment" {
         condition = [
           {
             host_header = {
-              values = [local.atlantis_url]
+              values = [var.atlantis_url]
             }
           }
         ]
@@ -130,7 +162,7 @@ module "ecs_deployment" {
           },
           {
             host_header = {
-              values = [local.atlantis_url]
+              values = [var.atlantis_url]
             }
           }
         ]
