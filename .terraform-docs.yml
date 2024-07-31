@@ -4,8 +4,7 @@ header-from: .header.md
 footer-from: ""
 
 recursive:
-  enabled: true
-  path: modules
+  enabled: false
   include-main: true
 
 output:
