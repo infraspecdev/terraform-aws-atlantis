@@ -40,48 +40,10 @@ variable "ecs_launch_type_memory" {
   default     = null
 }
 
-variable "container_memory_reservation" {
-  description = "Soft limit (in MiB) of memory to reserve for the container. When system memory is under contention, Docker attempts to keep the container memory to this soft limit"
-  type        = number
-}
-
-variable "launch_template_key_name" {
-  description = "The key name to use for the instance."
-  type        = string
-}
-
 variable "ecs_service_desired_count" {
   type        = number
   description = "(Optional) Number of instances of the task definition to place and keep running."
   default     = null
-}
-
-variable "ecs_launch_template_instance_type" {
-  description = "(Optional) The type of the instance."
-  type        = string
-  default     = null
-}
-
-variable "ecs_launch_template_image_id" {
-  description = "(Optional) The AMI from which to launch the instance."
-  type        = string
-  default     = null
-}
-
-variable "ecs_auto_scaling_group_desired_capacity" {
-  description = "(Optional) Number of Amazon EC2 instances that should be running in the group."
-  type        = number
-  default     = null
-}
-
-variable "ecs_auto_scaling_group_min_size" {
-  description = "(Required) Minimum size of the Auto Scaling Group"
-  type        = number
-}
-
-variable "ecs_auto_scaling_group_max_size" {
-  description = "(Required) Maximum size of the Auto Scaling Group."
-  type        = number
 }
 
 variable "atlantis_gh_user" {

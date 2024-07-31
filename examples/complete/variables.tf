@@ -23,11 +23,6 @@ variable "atlantis_repo_allowlist" {
   type        = string
 }
 
-variable "container_memory_reservation" {
-  description = "Memory reservation for the container"
-  type        = number
-}
-
 variable "base_domain" {
   description = "Base domain for the Atlantis server"
   type        = string
@@ -36,19 +31,4 @@ variable "base_domain" {
 variable "sub_domain" {
   description = "Subdomain for the Atlantis server"
   type        = string
-}
-
-variable "launch_template_key_name" {
-  description = "Key name for the launch template"
-  type        = string
-}
-
-variable "ecs_auto_scaling_group_min_size" {
-  description = "Minimum size of the ECS auto-scaling group"
-  type        = number
-}
-
-variable "ecs_auto_scaling_group_max_size" {
-  description = "Maximum size of the ECS auto-scaling group"
-  type        = number
 }

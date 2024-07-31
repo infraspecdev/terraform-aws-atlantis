@@ -10,3 +10,23 @@ data "aws_vpc" "selected" {
 data "aws_ecs_cluster" "default" {
   cluster_name = "default"
 }
+
+data "aws_iam_policy_document" "ecs_task_assume_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_acm_certificate" "base_domain_certificate" {
+  domain      = var.base_domain
+  statuses    = ["ISSUED"]
+  most_recent = false
+}
+
+data "aws_route53_zone" "zone" {
+  name = var.base_domain
+}
