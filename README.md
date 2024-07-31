@@ -76,13 +76,12 @@ This Terraform module automates the deployment of the Atlantis server on an ECS 
 |------|-------------|------|---------|:--------:|
 | <a name="input_atlantis_gh_user"></a> [atlantis\_gh\_user](#input\_atlantis\_gh\_user) | The GitHub username used by Atlantis to access repositories | `string` | n/a | yes |
 | <a name="input_atlantis_repo_allowlist"></a> [atlantis\_repo\_allowlist](#input\_atlantis\_repo\_allowlist) | Comma delimited string containing repos to use atlantis | `string` | n/a | yes |
-| <a name="input_base_domain"></a> [base\_domain](#input\_base\_domain) | Your base domain with acm certificate attached to it. | `string` | n/a | yes |
+| <a name="input_atlantis_url"></a> [atlantis\_url](#input\_atlantis\_url) | Full URL for the Atlantis server | `string` | n/a | yes |
 | <a name="input_ecs_launch_type_cpu"></a> [ecs\_launch\_type\_cpu](#input\_ecs\_launch\_type\_cpu) | EC2 instance CPU | `number` | `null` | no |
 | <a name="input_ecs_launch_type_memory"></a> [ecs\_launch\_type\_memory](#input\_ecs\_launch\_type\_memory) | EC2 instance memory | `number` | `null` | no |
 | <a name="input_ecs_service_desired_count"></a> [ecs\_service\_desired\_count](#input\_ecs\_service\_desired\_count) | (Optional) Number of instances of the task definition to place and keep running. | `number` | `null` | no |
 | <a name="input_private_subnet_ids"></a> [private\_subnet\_ids](#input\_private\_subnet\_ids) | List of Private subnet ids to deploy Atlantis server. | `list(string)` | n/a | yes |
 | <a name="input_public_subnet_ids"></a> [public\_subnet\_ids](#input\_public\_subnet\_ids) | List of Public subnet ids to deploy application load balancers. | `list(string)` | n/a | yes |
-| <a name="input_sub_domain"></a> [sub\_domain](#input\_sub\_domain) | Your desired sub domain | `string` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | VPC ID for creating Atlantis Resources. | `string` | n/a | yes |
 
 ## Outputs
