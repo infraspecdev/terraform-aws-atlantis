@@ -5,6 +5,5 @@ module "atlantis" {
   vpc_id                  = var.vpc_id
   atlantis_gh_user        = var.atlantis_gh_user
   atlantis_repo_allowlist = var.atlantis_repo_allowlist
-  base_domain             = var.base_domain
-  sub_domain              = var.sub_domain
+  atlantis_url            = var.atlantis_url
 }

@@ -23,12 +23,7 @@ variable "atlantis_repo_allowlist" {
   type        = string
 }
 
-variable "base_domain" {
-  description = "Base domain for the Atlantis server"
-  type        = string
-}
-
-variable "sub_domain" {
-  description = "Subdomain for the Atlantis server"
+variable "atlantis_url" {
+  description = "Full URL for the Atlantis server"
   type        = string
 }
