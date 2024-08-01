@@ -50,3 +50,8 @@ variable "thumbprint_list" {
   description = "The thumbprint of the OIDC provider"
   type        = list(string)
 }
+
+variable "atlantis_docker_image" {
+  description = "The Docker image to use for the Atlantis server"
+  type        = string
+}

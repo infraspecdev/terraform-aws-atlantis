@@ -12,4 +12,5 @@ atlantis_repo_allowlist        = ["repo1", "repo2"]
 
 # Optional Parameters
 thumbprint_list                = ["oidc-thumbprint-1", "oidc-thumbprint-2"]
+atlantis_docker_image =        = "<your-custom-docker-image>"
 ```

@@ -7,4 +7,5 @@ module "atlantis" {
   atlantis_repo_allowlist = var.atlantis_repo_allowlist
   atlantis_url            = var.atlantis_url
   thumbprint_list         = var.thumbprint_list
+  atlantis_docker_image   = var.atlantis_docker_image
 }

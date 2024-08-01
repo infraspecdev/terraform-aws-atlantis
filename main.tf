@@ -44,7 +44,7 @@ module "ecs_deployment" {
     execution_role_arn = aws_iam_role.task_role.arn
     container_definitions = [{
       name              = local.ecs_container_definations_name
-      image             = local.ecs_container_definations_image
+      image             = var.atlantis_docker_image
       container_port    = local.container_port
       environment       = local.env_variables
       secrets           = local.secrets

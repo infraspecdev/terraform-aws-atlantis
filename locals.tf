@@ -7,7 +7,6 @@ locals {
   domain_parts                             = split(".", var.atlantis_url)
   base_domain                              = join(".", slice(local.domain_parts, length(local.domain_parts) - 2, length(local.domain_parts)))
   sub_domain                               = join(".", slice(local.domain_parts, 0, length(local.domain_parts) - 2))
-  ecs_container_definations_image          = "ghcr.io/runatlantis/atlantis:v0.23.1"
   ecs_task_definition_family               = "atlantis"
   task_definition_network_mode             = "awsvpc"
   load_balancer_internal                   = "false"
