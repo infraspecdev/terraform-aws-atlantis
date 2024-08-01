@@ -1,6 +1,6 @@
 locals {
   google_oidc_endpoint                     = "https://accounts.google.com"
-  thumbprint_list                          = ["e252aa6e92432f32cbc1b182056627c239652678"]
+  thumbprint_list                          = var.thumbprint_list
   container_port                           = 4141
   alb_ip_target_type                       = "ip"
   ecs_container_definations_name           = "atlantis"

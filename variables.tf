@@ -45,3 +45,8 @@ variable "atlantis_gh_user" {
   description = "The GitHub username used by Atlantis to access repositories"
   type        = string
 }
+
+variable "thumbprint_list" {
+  description = "The thumbprint of the OIDC provider"
+  type        = list(string)
+}

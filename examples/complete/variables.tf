@@ -27,3 +27,9 @@ variable "atlantis_url" {
   description = "Full URL for the Atlantis server"
   type        = string
 }
+
+variable "thumbprint_list" {
+  description = "List of thumbprints for the OIDC provider"
+  type        = list(string)
+  default     = ["e252aa6e92432f32cbc1b182056627c239652678"]
+}
