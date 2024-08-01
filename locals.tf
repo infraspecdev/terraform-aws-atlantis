@@ -1,6 +1,5 @@
 locals {
   google_oidc_endpoint                     = "https://accounts.google.com"
-  thumbprint_list                          = var.thumbprint_list
   container_port                           = 4141
   alb_ip_target_type                       = "ip"
   ecs_container_definations_name           = "atlantis"
@@ -46,7 +45,7 @@ locals {
     },
     {
       name  = "ATLANTIS_PORT"
-      value = "4141"
+      value = tostring(local.container_port)
     },
     {
       name  = "ATLANTIS_ENABLE_DIFF_MARKDOWN_FORMAT"

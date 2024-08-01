@@ -11,5 +11,5 @@ atlantis_gh_user               = "your-github-username"
 atlantis_repo_allowlist        = ["repo1", "repo2"]
 
 # Optional Parameters
-thumbprint_list                = ["your-thumbprint-1", "your-thumbprint-2"]
+thumbprint_list                = ["oidc-thumbprint-1", "oidc-thumbprint-2"]
 ```
