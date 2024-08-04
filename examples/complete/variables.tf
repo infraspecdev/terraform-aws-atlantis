@@ -29,17 +29,17 @@ variable "atlantis_url" {
 }
 
 # Optional variables defination
-variable "thumbprint_list" {
-  description = "List of thumbprints for the OIDC provider"
-  type        = list(string)
-}
+# variable "thumbprint_list" {
+#   description = "List of thumbprints for the OIDC provider"
+#   type        = list(string)
+# }
 
-variable "atlantis_docker_image" {
-  description = "The Docker image to use for the Atlantis server"
-  type        = string
-}
+# variable "atlantis_docker_image" {
+#   description = "The Docker image to use for the Atlantis server"
+#   type        = string
+# }
 
-variable "ecs_cluster_name" {
-  description = "The name of the ECS cluster"
-  type        = string
-}
+# variable "ecs_cluster_name" {
+#   description = "The name of the ECS cluster"
+#   type        = string
+# }

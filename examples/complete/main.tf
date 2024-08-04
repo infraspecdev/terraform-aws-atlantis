@@ -8,7 +8,7 @@ module "atlantis" {
   atlantis_url            = var.atlantis_url
 
   # Optional variables
-  thumbprint_list       = var.thumbprint_list
-  atlantis_docker_image = var.atlantis_docker_image
-  ecs_cluster_name      = var.ecs_cluster_name
+  # thumbprint_list       = var.thumbprint_list
+  # atlantis_docker_image = var.atlantis_docker_image
+  # ecs_cluster_name      = var.ecs_cluster_name
 }
