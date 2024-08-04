@@ -33,7 +33,7 @@ data "aws_route53_zone" "zone" {
 
 module "ecs_deployment" {
   source  = "infraspecdev/ecs-deployment/aws"
-  version = "2.1.0"
+  version = "3.0.1"
 
   cluster_name = data.aws_ecs_cluster.default.cluster_name
   vpc_id       = var.vpc_id
@@ -58,6 +58,8 @@ module "ecs_deployment" {
     }]
     cpu    = try(var.ecs_launch_type_cpu, null)
     memory = try(var.ecs_launch_type_memory, null)
+
+    volume = {}
   }
   service = {
     name          = local.ecs_service_name
@@ -65,7 +67,7 @@ module "ecs_deployment" {
     load_balancer = [{
       container_name = local.ecs_container_definations_name
       container_port = local.container_port
-      target_group   = "target-group"
+      target_group   = "atlantis-target-group"
     }]
 
     network_configuration = {
@@ -81,7 +83,7 @@ module "ecs_deployment" {
     security_groups_ids = [aws_security_group.alb.id]
 
     target_groups = {
-      target-group = {
+      atlantis-target-group = {
         name        = format("%s-%s-ip", local.alb_system_name, terraform.workspace)
         port        = local.container_port
         protocol    = "HTTP"
@@ -98,7 +100,7 @@ module "ecs_deployment" {
         default_action = [
           {
             type         = "fixed-response"
-            target_group = "target-group"
+            target_group = "atlantis-target-group"
             fixed_response = {
               content_type = "application/json"
               message_body = "Unauthorised"
@@ -124,8 +126,7 @@ module "ecs_deployment" {
 
         action = [
           {
-            target_group = ""
-            type         = "authenticate-oidc"
+            type = "authenticate-oidc"
 
             authenticate_oidc = {
               authorization_endpoint     = local.authenticate_oidc_authorization_endpoint
@@ -140,7 +141,7 @@ module "ecs_deployment" {
             }
           },
           {
-            target_group = "target-group"
+            target_group = "atlantis-target-group"
             type         = "forward"
           }
         ]
@@ -169,7 +170,7 @@ module "ecs_deployment" {
 
         action = [
           {
-            target_group = "target-group"
+            target_group = "atlantis-target-group"
             type         = "forward"
           }
         ]
