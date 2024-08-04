@@ -12,9 +12,9 @@ atlantis_gh_user               = "your-github-username"
 atlantis_repo_allowlist        = ["repo1", "repo2"]
 
 # Optional Parameters
-thumbprint_list                = ["oidc-thumbprint-1", "oidc-thumbprint-2"]
-atlantis_docker_image =        = "<your-custom-docker-image>"
-ecs_cluster_name               = "<your-ecs-cluster-name>"
+# thumbprint_list                = ["oidc-thumbprint-1", "oidc-thumbprint-2"]
+# atlantis_docker_image =        = "<your-custom-docker-image>"
+# ecs_cluster_name               = "<your-ecs-cluster-name>"
 ```
 
 ## Requirements
@@ -41,14 +41,11 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_atlantis_docker_image"></a> [atlantis\_docker\_image](#input\_atlantis\_docker\_image) | The Docker image to use for the Atlantis server | `string` | n/a | yes |
 | <a name="input_atlantis_gh_user"></a> [atlantis\_gh\_user](#input\_atlantis\_gh\_user) | GitHub username for Atlantis | `string` | n/a | yes |
 | <a name="input_atlantis_repo_allowlist"></a> [atlantis\_repo\_allowlist](#input\_atlantis\_repo\_allowlist) | GitHub repository allowlist for Atlantis | `string` | n/a | yes |
 | <a name="input_atlantis_url"></a> [atlantis\_url](#input\_atlantis\_url) | Full URL for the Atlantis server | `string` | n/a | yes |
-| <a name="input_ecs_cluster_name"></a> [ecs\_cluster\_name](#input\_ecs\_cluster\_name) | The name of the ECS cluster | `string` | n/a | yes |
 | <a name="input_private_subnet_ids"></a> [private\_subnet\_ids](#input\_private\_subnet\_ids) | List of private subnet IDs | `list(string)` | n/a | yes |
 | <a name="input_public_subnet_ids"></a> [public\_subnet\_ids](#input\_public\_subnet\_ids) | List of public subnet IDs | `list(string)` | n/a | yes |
-| <a name="input_thumbprint_list"></a> [thumbprint\_list](#input\_thumbprint\_list) | List of thumbprints for the OIDC provider | `list(string)` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | VPC ID where resources will be deployed | `string` | n/a | yes |
 
 ## Outputs
