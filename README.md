@@ -52,7 +52,7 @@ This Terraform module automates the deployment of the Atlantis server on an ECS 
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_ecs_deployment"></a> [ecs\_deployment](#module\_ecs\_deployment) | infraspecdev/ecs-deployment/aws | 2.1.0 |
+| <a name="module_ecs_deployment"></a> [ecs\_deployment](#module\_ecs\_deployment) | infraspecdev/ecs-deployment/aws | 3.0.1 |
 
 ## Resources
 
