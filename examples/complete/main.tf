@@ -6,6 +6,9 @@ module "atlantis" {
   atlantis_gh_user        = var.atlantis_gh_user
   atlantis_repo_allowlist = var.atlantis_repo_allowlist
   atlantis_url            = var.atlantis_url
-  thumbprint_list         = var.thumbprint_list
-  atlantis_docker_image   = var.atlantis_docker_image
+
+  # Optional variables
+  thumbprint_list       = var.thumbprint_list
+  atlantis_docker_image = var.atlantis_docker_image
+  ecs_cluster_name      = var.ecs_cluster_name
 }
