@@ -8,28 +8,27 @@ data "aws_vpc" "selected" {
 }
 
 data "aws_ecs_cluster" "default" {
-  cluster_name = "default"
+  cluster_name = var.ecs_cluster_name
 }
 
 data "aws_iam_policy_document" "ecs_task_assume_policy" {
   statement {
-    actions = ["sts:AssumeRole"]
+    actions = local.ecs_task_assume_policy_actions
     principals {
-      type        = "Service"
-      identifiers = ["ecs-tasks.amazonaws.com"]
+      type        = local.ecs_task_assume_policy_principal_type
+      identifiers = local.ecs_task_assume_policy_principal_identifiers
     }
   }
 }
 
 data "aws_acm_certificate" "base_domain_certificate" {
   domain   = local.base_domain
-  statuses = ["ISSUED"]
+  statuses = local.acm_certificate_statuses
 }
 
 data "aws_route53_zone" "zone" {
   name = local.base_domain
 }
-
 
 module "ecs_deployment" {
   source  = "infraspecdev/ecs-deployment/aws"
@@ -63,11 +62,11 @@ module "ecs_deployment" {
   }
   service = {
     name          = local.ecs_service_name
-    desired_count = var.ecs_service_desired_count != null ? var.ecs_service_desired_count : 1
+    desired_count = var.ecs_service_desired_count != null ? var.ecs_service_desired_count : local.default_desired_count
     load_balancer = [{
       container_name = local.ecs_container_definations_name
       container_port = local.container_port
-      target_group   = "atlantis-target-group"
+      target_group   = local.target_group_name
     }]
 
     network_configuration = {
@@ -86,25 +85,25 @@ module "ecs_deployment" {
       atlantis-target-group = {
         name        = format("%s-%s-ip", local.alb_system_name, terraform.workspace)
         port        = local.container_port
-        protocol    = "HTTP"
+        protocol    = local.target_group_protocol
         target_type = local.alb_ip_target_type
       }
     }
 
     listeners = {
       https-listener = {
-        protocol        = "HTTPS"
-        port            = 443
+        protocol        = local.listener_protocol
+        port            = local.listener_port
         certificate_arn = data.aws_acm_certificate.base_domain_certificate.arn
 
         default_action = [
           {
-            type         = "fixed-response"
-            target_group = "atlantis-target-group"
+            type         = local.default_action_type
+            target_group = local.target_group_name
             fixed_response = {
-              content_type = "application/json"
-              message_body = "Unauthorised"
-              status_code  = 404
+              content_type = local.fixed_response_content_type
+              message_body = local.fixed_response_message_body
+              status_code  = local.fixed_response_status_code
             }
           }
         ]
@@ -113,8 +112,8 @@ module "ecs_deployment" {
 
     listener_rules = {
       https-listener-rules = {
-        listener = "https-listener"
-        priority = 10
+        listener = local.listener_name
+        priority = local.listener_priority
 
         condition = [
           {
@@ -126,7 +125,7 @@ module "ecs_deployment" {
 
         action = [
           {
-            type = "authenticate-oidc"
+            type = local.authenticate_oidc_type
 
             authenticate_oidc = {
               authorization_endpoint     = local.authenticate_oidc_authorization_endpoint
@@ -134,31 +133,31 @@ module "ecs_deployment" {
               user_info_endpoint         = local.authenticate_oidc_user_info_endpoint
               issuer                     = local.authenticate_oidc_issuer
               session_cookie_name        = format("TOKEN-OIDC-%s", data.aws_ssm_parameter.environment["ATLANTIS_GOOGLE_CLIENT_ID"].value)
-              scope                      = "openid email"
-              on_unauthenticated_request = "authenticate"
+              scope                      = local.authenticate_oidc_scope
+              on_unauthenticated_request = local.authenticate_oidc_on_unauthenticated_request
               client_id                  = data.aws_ssm_parameter.environment["ATLANTIS_GOOGLE_CLIENT_ID"].value
               client_secret              = data.aws_ssm_parameter.environment["ATLANTIS_GOOGLE_CLIENT_SECRET"].value
             }
           },
           {
-            target_group = "atlantis-target-group"
-            type         = "forward"
+            target_group = local.target_group_name
+            type         = local.forward_action_type
           }
         ]
       },
       http-listener-rules = {
-        listener = "https-listener"
-        priority = 1
+        listener = local.listener_name
+        priority = local.http_listener_priority
 
         condition = [
           {
             path_pattern = {
-              values = ["/events"]
+              values = local.path_pattern_values
             }
           },
           {
             http_request_method = {
-              values = ["POST"]
+              values = local.http_request_method_values
             }
           },
           {
@@ -170,13 +169,13 @@ module "ecs_deployment" {
 
         action = [
           {
-            target_group = "atlantis-target-group"
-            type         = "forward"
+            target_group = local.target_group_name
+            type         = local.forward_action_type
           }
         ]
       }
     }
   }
 
-  create_capacity_provider = false
+  create_capacity_provider = local.create_capacity_provider
 }

@@ -49,9 +49,17 @@ variable "atlantis_gh_user" {
 variable "thumbprint_list" {
   description = "The thumbprint of the OIDC provider"
   type        = list(string)
+  default     = ["e252aa6e92432f32cbc1b182056627c239652678"]
 }
 
 variable "atlantis_docker_image" {
   description = "The Docker image to use for the Atlantis server"
   type        = string
+  default     = "ghcr.io/runatlantis/atlantis:v0.23.1"
+}
+
+variable "ecs_cluster_name" {
+  description = "The name of the ECS cluster"
+  type        = string
+  default     = "default"
 }
