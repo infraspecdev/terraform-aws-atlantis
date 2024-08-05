@@ -13,7 +13,6 @@ This Terraform module automates the deployment of the Atlantis server on an ECS 
 
 ## Prerequisites
 
-- Domain with ACM certificate attached
 - Application secrets stored in AWS SSM Parameter Store with the following names and descriptions:
   - `/atlantis/ATLANTIS_GH_TOKEN`: A GitHub personal access token with repo and admin:repo\_hook permissions. Generate this from GitHub Developer settings.
   - `/atlantis/ATLANTIS_GH_WEBHOOK_SECRET`: The secret used to validate GitHub webhooks. Create a random secret string for this.
