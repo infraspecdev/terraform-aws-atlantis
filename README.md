@@ -52,7 +52,7 @@ This Terraform module automates the deployment of the Atlantis server on an ECS 
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_ecs_deployment"></a> [ecs\_deployment](#module\_ecs\_deployment) | infraspecdev/ecs-deployment/aws | 3.0.1 |
+| <a name="module_ecs_deployment"></a> [ecs\_deployment](#module\_ecs\_deployment) | infraspecdev/ecs-deployment/aws | 4.0.4 |
 
 ## Resources
 
@@ -63,7 +63,6 @@ This Terraform module automates the deployment of the Atlantis server on an ECS 
 | [aws_route53_record.record](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) | resource |
 | [aws_security_group.alb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_security_group.ecs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
-| [aws_acm_certificate.base_domain_certificate](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/acm_certificate) | data source |
 | [aws_ecs_cluster.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ecs_cluster) | data source |
 | [aws_iam_policy_document.ecs_task_assume_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_route53_zone.zone](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route53_zone) | data source |
