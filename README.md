@@ -49,7 +49,7 @@ This Terraform module automates the deployment of the Atlantis server on an ECS 
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_atlantis_docker_image"></a> [atlantis\_docker\_image](#input\_atlantis\_docker\_image) | The Docker image to use for the Atlantis server | `string` | `"ghcr.io/runatlantis/atlantis:v0.23.1"` | no |
+| <a name="input_atlantis_docker_image"></a> [atlantis\_docker\_image](#input\_atlantis\_docker\_image) | The Docker image to use for the Atlantis server | `string` | `"ghcr.io/runatlantis/atlantis:v0.28.5"` | no |
 | <a name="input_atlantis_gh_user"></a> [atlantis\_gh\_user](#input\_atlantis\_gh\_user) | The GitHub username used by Atlantis to access repositories | `string` | n/a | yes |
 | <a name="input_atlantis_repo_allowlist"></a> [atlantis\_repo\_allowlist](#input\_atlantis\_repo\_allowlist) | Comma delimited string containing repos to use atlantis | `string` | n/a | yes |
 | <a name="input_atlantis_url"></a> [atlantis\_url](#input\_atlantis\_url) | Full URL for the Atlantis server | `string` | n/a | yes |
