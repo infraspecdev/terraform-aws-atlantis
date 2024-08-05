@@ -19,9 +19,9 @@ locals {
   ecs_task_assume_policy_actions               = ["sts:AssumeRole"]
   ecs_task_assume_policy_principal_type        = "Service"
   ecs_task_assume_policy_principal_identifiers = ["ecs-tasks.amazonaws.com"]
-  acm_certificate_statuses                     = ["ISSUED"]
   default_desired_count                        = 1
   target_group_name                            = "atlantis-target-group"
+  acm_certificate_name                         = "atlantis-domain"
   target_group_protocol                        = "HTTP"
   listener_protocol                            = "HTTPS"
   listener_port                                = 443

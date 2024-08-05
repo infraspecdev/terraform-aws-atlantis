@@ -21,18 +21,13 @@ data "aws_iam_policy_document" "ecs_task_assume_policy" {
   }
 }
 
-data "aws_acm_certificate" "base_domain_certificate" {
-  domain   = local.base_domain
-  statuses = local.acm_certificate_statuses
-}
-
 data "aws_route53_zone" "zone" {
   name = local.base_domain
 }
 
 module "ecs_deployment" {
   source  = "infraspecdev/ecs-deployment/aws"
-  version = "3.0.1"
+  version = "4.0.4"
 
   cluster_name = data.aws_ecs_cluster.default.cluster_name
   vpc_id       = var.vpc_id
@@ -82,7 +77,7 @@ module "ecs_deployment" {
     security_groups_ids = [aws_security_group.alb.id]
 
     target_groups = {
-      atlantis-target-group = {
+      (local.target_group_name) = {
         name        = format("%s-%s-ip", local.alb_system_name, terraform.workspace)
         port        = local.container_port
         protocol    = local.target_group_protocol
@@ -92,9 +87,9 @@ module "ecs_deployment" {
 
     listeners = {
       https-listener = {
-        protocol        = local.listener_protocol
-        port            = local.listener_port
-        certificate_arn = data.aws_acm_certificate.base_domain_certificate.arn
+        protocol    = local.listener_protocol
+        port        = local.listener_port
+        certificate = local.acm_certificate_name
 
         default_action = [
           {
@@ -178,4 +173,16 @@ module "ecs_deployment" {
   }
 
   create_capacity_provider = local.create_capacity_provider
+
+  create_acm = true
+  acm_certificates = {
+    (local.acm_certificate_name) = {
+      domain_name = var.atlantis_url
+      validation_option = {
+        domain_name       = var.atlantis_url
+        validation_domain = var.atlantis_url
+      }
+      record_zone_id = data.aws_route53_zone.zone.zone_id
+    }
+  }
 }
