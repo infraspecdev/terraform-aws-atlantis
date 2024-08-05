@@ -55,7 +55,7 @@ variable "thumbprint_list" {
 variable "atlantis_docker_image" {
   description = "The Docker image to use for the Atlantis server"
   type        = string
-  default     = "ghcr.io/runatlantis/atlantis:v0.23.1"
+  default     = "ghcr.io/runatlantis/atlantis:v0.28.5"
 }
 
 variable "ecs_cluster_name" {

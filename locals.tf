@@ -46,7 +46,7 @@ locals {
       value = var.atlantis_gh_user
     },
     {
-      name  = "ATLANTIS_URL"
+      name  = "ATLANTIS_ATLANTIS_URL"
       value = "https://${var.atlantis_url}"
     },
     {
