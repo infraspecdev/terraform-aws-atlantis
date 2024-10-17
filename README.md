@@ -59,7 +59,7 @@ This Terraform module automates the deployment of the Atlantis server on an ECS 
 | <a name="input_ecs_service_desired_count"></a> [ecs\_service\_desired\_count](#input\_ecs\_service\_desired\_count) | (Optional) Number of instances of the task definition to place and keep running. | `number` | `null` | no |
 | <a name="input_private_subnet_ids"></a> [private\_subnet\_ids](#input\_private\_subnet\_ids) | List of Private subnet ids to deploy Atlantis server. | `list(string)` | n/a | yes |
 | <a name="input_public_subnet_ids"></a> [public\_subnet\_ids](#input\_public\_subnet\_ids) | List of Public subnet ids to deploy application load balancers. | `list(string)` | n/a | yes |
-| <a name="input_thumbprint_list"></a> [thumbprint\_list](#input\_thumbprint\_list) | The thumbprint of the OIDC provider | `list(string)` | <pre>[<br>  "e252aa6e92432f32cbc1b182056627c239652678"<br>]</pre> | no |
+| <a name="input_thumbprint_list"></a> [thumbprint\_list](#input\_thumbprint\_list) | The thumbprint of the OIDC provider | `list(string)` | <pre>[<br/>  "e252aa6e92432f32cbc1b182056627c239652678"<br/>]</pre> | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | VPC ID for creating Atlantis Resources. | `string` | n/a | yes |
 
 ## Outputs
