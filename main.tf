@@ -27,7 +27,7 @@ data "aws_route53_zone" "zone" {
 
 module "ecs_deployment" {
   source  = "infraspecdev/ecs-deployment/aws"
-  version = "4.0.4"
+  version = "4.3.4"
 
   cluster_name = data.aws_ecs_cluster.default.cluster_name
   vpc_id       = var.vpc_id
